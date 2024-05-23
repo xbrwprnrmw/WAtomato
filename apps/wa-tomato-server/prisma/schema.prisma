@@ -1,0 +1,48 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model KnowledgeBase {
+  connections Connection[]
+  content     String?
+  createdAt   DateTime     @default(now())
+  createdDate DateTime?
+  id          String       @id @default(cuid())
+  title       String?
+  updatedAt   DateTime     @updatedAt
+}
+
+model VoiceflowBot {
+  createdAt   DateTime @default(now())
+  description String?
+  id          String   @id @default(cuid())
+  name        String?
+  updatedAt   DateTime @updatedAt
+}
+
+model QrCode {
+  createdAt  DateTime  @default(now())
+  expiryDate DateTime?
+  id         String    @id @default(cuid())
+  updatedAt  DateTime  @updatedAt
+  url        String?
+}
+
+model Connection {
+  bot             String?
+  createdAt       DateTime              @default(now())
+  id              String                @id @default(cuid())
+  knowledgeBase   KnowledgeBase?        @relation(fields: [knowledgeBaseId], references: [id])
+  knowledgeBaseId String?
+  status          EnumConnectionStatus?
+  updatedAt       DateTime              @updatedAt
+}
+
+enum EnumConnectionStatus {
+  Option1
+}
